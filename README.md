@@ -48,6 +48,10 @@ Both run in parallel. Whichever returns usable items first wins.
 
 ## Getting Started
 
+you could start immediately by using https://receipt-inator.vercel.app
+
+or if you want to self host you could follow this instructions:
+
 ### Prerequisites
 
 - Node.js 18+ and npm
