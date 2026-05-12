@@ -50,7 +50,7 @@ Both run in parallel. Whichever returns usable items first wins.
 
 you could start immediately by using https://receipt-inator.vercel.app
 
-or if you want to self host you could follow this instructions:
+or if you want to self host you could follow these instructions:
 
 ### Prerequisites
 
