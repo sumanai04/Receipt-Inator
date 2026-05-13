@@ -84,12 +84,20 @@ export default function HomePage() {
   const [isParsing, setIsParsing] = useState(false);
 
   const handleImageReady = useCallback(
-    async (imageDataUrl: string) => {
+    (imageDataUrl: string) => {
       setBillImage(imageDataUrl);
       setHasStarted(true);
+    },
+    []
+  );
+
+  const handleOCRComplete = useCallback(
+    async (text: string, imageDataUrl: string) => {
+      setOcrRawText(text || null);
+      setShowOcrText(true);
       setIsParsing(true);
 
-      const result = await analyzeReceiptImage(imageDataUrl);
+      const result = await analyzeReceiptImage(imageDataUrl, text);
 
       if (result.success && result.items.length > 0) {
         setItems(
@@ -101,40 +109,22 @@ export default function HomePage() {
           }))
         );
         setParserUsed("deepseek");
-        setIsParsing(false);
-      }
-    },
-    []
-  );
-
-  const handleOCRComplete = useCallback(
-    (text: string, imageDataUrl: string) => {
-      setOcrRawText(text || null);
-      setShowOcrText(true);
-
-      // If DeepSeek already succeeded, skip regex
-      setParserUsed((current) => {
-        if (current === "deepseek") return current;
-        return null;
-      });
-
-      setIsParsing((currentlyParsing) => {
-        if (!currentlyParsing) return false;
-
-        // DeepSeek didn't succeed — fall back to regex
+      } else {
+        // DeepSeek failed — fall back to regex
         const parsed = parseReceiptText(text);
         if (parsed.length > 0) {
-          const newItems: BillItem[] = parsed.map((p) => ({
-            id: generateId(),
-            name: p.name,
-            price: p.price,
-            assignedTo: [],
-          }));
-          setItems(newItems);
+          setItems(
+            parsed.map((p) => ({
+              id: generateId(),
+              name: p.name,
+              price: p.price,
+              assignedTo: [],
+            }))
+          );
           setParserUsed("regex");
         }
-        return false;
-      });
+      }
+      setIsParsing(false);
     },
     []
   );
