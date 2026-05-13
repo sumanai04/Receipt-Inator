@@ -24,7 +24,7 @@ export default function BillEditor({
   const addItem = () => {
     const name = newName.trim();
     const price = parseFloat(newPrice);
-    if (!name || isNaN(price) || price <= 0) return;
+    if (!name || isNaN(price) || price === 0) return;
     onChangeItems([
       ...items,
       { id: generateId(), name, price, assignedTo: [] },
@@ -140,7 +140,6 @@ export default function BillEditor({
               onChange={(e) => setNewPrice(e.target.value)}
               placeholder="Price"
               step="0.01"
-              min="0"
               className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
             />
             <button
