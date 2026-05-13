@@ -83,10 +83,10 @@ export default function SplitSummary({
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-3 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
         <div className="bg-gray-900 rounded-xl p-3">
           <p className="text-gray-500 text-xs">Subtotal</p>
-          <p className="text-gray-100 font-mono font-medium">
+          <p className="text-gray-100 font-mono font-medium text-sm truncate">
             {formatCurrency(subtotal)}
           </p>
         </div>
@@ -99,7 +99,7 @@ export default function SplitSummary({
             placeholder="0"
             step="0.01"
             min="0"
-            className="w-full text-center bg-transparent text-gray-100 font-mono font-medium focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-full text-center bg-transparent text-gray-100 font-mono font-medium text-sm focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
         </div>
         <div className="bg-gray-900 rounded-xl p-3">
@@ -111,7 +111,7 @@ export default function SplitSummary({
             placeholder="0"
             step="0.01"
             min="0"
-            className="w-full text-center bg-transparent text-gray-100 font-mono font-medium focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-full text-center bg-transparent text-gray-100 font-mono font-medium text-sm focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
         </div>
       </div>
