@@ -68,14 +68,14 @@ export default function PeopleManager({ people, onChange }: Props) {
           e.preventDefault();
           add();
         }}
-        className="flex gap-2"
+        className="flex flex-col sm:flex-row gap-2"
       >
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Add a person..."
-          className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
+          className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
         />
         <button
           type="submit"
