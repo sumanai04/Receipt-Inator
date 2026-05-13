@@ -5,7 +5,10 @@ interface ReceiptItem {
   price: number;
 }
 
-export async function analyzeReceiptImage(imageDataUrl: string): Promise<{
+export async function analyzeReceiptImage(
+  imageDataUrl: string,
+  ocrText?: string
+): Promise<{
   success: boolean;
   items: ReceiptItem[];
   error?: string;
@@ -52,7 +55,7 @@ Rules:
 - Strip quantity markers (x1, 2x) from names
 - If the price uses dot as thousands separator ("15.000"), treat it as 15000
 - Normalize names: capitalize each word, remove stray symbols
-
+${ocrText ? `\nTesseract OCR has already read the following raw text from this receipt. Use it to cross-reference and correct any visual misreads. If the OCR text and the image disagree on an item's name or price, use your best judgment — prefer the OCR value when it looks like a clear character recognition result, prefer the visual reading when the OCR seems garbled:\n\n--- OCR TEXT ---\n${ocrText}\n--- END OCR ---\n` : ""}
 Example output:
 [{"name":"Nasi Putih","price":18000},{"name":"Pepes Teri","price":15000}]
 
