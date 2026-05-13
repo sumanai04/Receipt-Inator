@@ -54,3 +54,7 @@ lib/
 ### 4. Cross-reference OCR text with DeepSeek (commit ef26329)
 - **receiptParser.ts** — `analyzeReceiptImage` now accepts optional `ocrText` param. When provided, Tesseract's raw OCR output is injected into the DeepSeek prompt so the model can cross-reference both image and text.
 - **page.tsx** — restructured flow: DeepSeek now fires from `handleOCRComplete` (after Tesseract finishes) instead of `handleImageReady`, so both image and OCR text are available. Regex fallback still runs if DeepSeek fails.
+
+### 5. OCR image preprocessing + Indonesian language (commit 53b0a31)
+- **BillUploader.tsx** — added `preprocessImage()` function that runs receipt images through an offscreen canvas: grayscale conversion + OTSU auto-threshold binarization. Produces crisp black/white text that Tesseract reads far more accurately than raw photos with shadows and uneven lighting.
+- Changed Tesseract language from `"eng"` to `"eng+ind"` so Indonesian receipt terms are recognized.
