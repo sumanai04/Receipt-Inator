@@ -26,6 +26,71 @@ export default function BillUploader({ onImageReady, onOCRComplete }: Props) {
     setShowCamera(false);
   }, [stream]);
 
+  const preprocessImage = (dataUrl: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imageData.data;
+
+        // Build grayscale histogram for OTSU threshold
+        const hist = new Array(256).fill(0);
+        for (let i = 0; i < pixels.length; i += 4) {
+          const gray = Math.round(
+            0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2]
+          );
+          hist[gray]++;
+        }
+
+        // OTSU method — find optimal threshold
+        const total = canvas.width * canvas.height;
+        let sum = 0;
+        for (let i = 0; i < 256; i++) sum += i * hist[i];
+
+        let sumB = 0;
+        let wB = 0;
+        let maxVariance = 0;
+        let threshold = 128;
+
+        for (let t = 0; t < 256; t++) {
+          wB += hist[t];
+          if (wB === 0) continue;
+          const wF = total - wB;
+          if (wF === 0) break;
+          sumB += t * hist[t];
+          const mB = sumB / wB;
+          const mF = (sum - sumB) / wF;
+          const between = wB * wF * (mB - mF) * (mB - mF);
+          if (between > maxVariance) {
+            maxVariance = between;
+            threshold = t;
+          }
+        }
+
+        // Binarize: slightly lower threshold to catch faint text
+        const cutoff = Math.max(threshold - 15, 20);
+        for (let i = 0; i < pixels.length; i += 4) {
+          const gray =
+            0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2];
+          const value = gray < cutoff ? 0 : 255;
+          pixels[i] = value;
+          pixels[i + 1] = value;
+          pixels[i + 2] = value;
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      };
+      img.src = dataUrl;
+    });
+  };
+
   const processImage = async (file: File) => {
     setIsProcessing(true);
     setProgress(0);
@@ -41,6 +106,16 @@ export default function BillUploader({ onImageReady, onOCRComplete }: Props) {
     onImageReady(imageDataUrl);
 
     setProgress(10);
+    setStatusText("Preprocessing image for OCR...");
+
+    let processedUrl: string;
+    try {
+      processedUrl = await preprocessImage(imageDataUrl);
+    } catch {
+      processedUrl = imageDataUrl;
+    }
+
+    setProgress(15);
     setStatusText("Initializing OCR engine...");
 
     try {
@@ -48,7 +123,7 @@ export default function BillUploader({ onImageReady, onOCRComplete }: Props) {
       setProgress(20);
       setStatusText("Reading receipt (this takes ~10s)...");
 
-      const result = await Tesseract.recognize(imageDataUrl, "eng", {
+      const result = await Tesseract.recognize(processedUrl, "eng+ind", {
         logger: (m) => {
           if (m.status === "recognizing text") {
             setProgress(20 + Math.round((m.progress || 0) * 70));
