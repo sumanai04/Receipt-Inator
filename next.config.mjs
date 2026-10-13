@@ -1,12 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    remotePatterns: [],
-  },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
+  output: "export",
+  images: { unoptimized: true },
+  swcMinify: false,
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      crypto: false,
+      os: false,
+    };
+    return config;
   },
 };
 

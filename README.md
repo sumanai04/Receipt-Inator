@@ -1,134 +1,42 @@
 # Bill Splitter
 
-Split bills from receipt photos. Snap a picture, and the app extracts every line item using AI vision — then split them across people with tax, tip, and rounding handled automatically.
+Split bills from receipt photos. Snap a picture — the app reads the items **on your device** and splits them across people, with tax and service handled fairly.
 
-**No login. No backend. All data stays in your browser.**
+**Runs entirely in the browser. No login, no backend, no API keys, no cost. Nothing is uploaded.**
 
-## Features
+## How it works
 
-- **Receipt photo parsing** — DeepSeek Vision extracts items, prices, and quantities from any receipt
-- **Offline fallback** — Tesseract.js OCR runs locally in your browser when the AI is unavailable
-- **Camera capture** — Take a photo directly (uses the rear camera on mobile)
-- **Drag & drop** — Drop an image file onto the upload area
-- **Manual entry** — Add items and people by hand if you prefer
-- **Per-person assignment** — Tap to assign each item to one or more people
-- **Auto-split remainder** — Unassigned items and tax/tip are split evenly
-- **IDR support** — Currency formatted as Indonesian Rupiah; handles dot-as-thousands-separator (`15.000` = 15000)
-- **Smart filtering** — Skips subtotal, tax, cash, change, and other non-item lines (English + Indonesian)
-- **Negative value handling** — Rounding adjustments and discounts work correctly
-- **Session history** — Saved sessions persist in localStorage; load or delete them anytime
-- **Mobile-first UI** — Designed for phone browsers, works as a Vercel deployment
+- **OCR** runs client-side: **PaddleOCR** (PP-OCRv6 via ONNX Runtime Web) is the primary engine, with **Tesseract.js** as fallback. Both run in the browser; nothing is uploaded.
+- A **deterministic parser** turns the OCR text into items + charges (Indonesian receipts: PB1/PBJT, service charge, pembulatan).
+- A **money engine** splits per-item tax, equal service, and tip using integer rupiah with largest-remainder rounding, so each person's total always sums exactly to the bill.
 
-## How It Works
-
-```
-Receipt photo
-    │
-    ├── DeepSeek Vision (server-side, primary)
-    │   Sees the image, returns structured items via API
-    │
-    └── Tesseract.js (client-side, fallback)
-        OCR extracts text, regex parses prices
-        Kicks in automatically if DeepSeek finds nothing
-```
-
-Both run in parallel. Whichever returns usable items first wins.
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 14 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| AI Vision | DeepSeek Vision API (`deepseek-chat`) |
-| OCR Fallback | Tesseract.js v7 (browser-based) |
-| Storage | localStorage (no database) |
-| Deployment | Vercel |
-
-## Getting Started
-
-you could start immediately by using https://receipt-inator.vercel.app
-
-or if you want to self host you could follow these instructions:
-
-### Prerequisites
-
-- Node.js 18+ and npm
-
-### 1. Install dependencies
+## Quick start
 
 ```bash
 cd src/frontend
 npm install
-```
-
-### 2. Set your DeepSeek API key
-
-Create `.env.local`:
-
-```bash
-DEEPSEEK_API_KEY="sk-your-api-key-here"
-```
-
-Get a key at [platform.deepseek.com/api_keys](https://platform.deepseek.com/api_keys).
-
-> The app works without this key — it falls back to browser OCR + regex. But DeepSeek Vision is significantly more accurate.
-
-### 3. Run the dev server
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open http://localhost:3000
 
-### 4. Build for production
+## Build & deploy
+
+The app builds to a **static export** (`out/`) — deploy anywhere static.
 
 ```bash
-npm run build
-npm start
+npm run build      # outputs to out/
 ```
 
-## Deploy to Vercel
+- **Vercel:** import the repo, set Root Directory to `src/frontend`. (Headers via `vercel.json`.)
+- **Cloudflare Pages / Netlify / GitHub Pages:** publish the `out/` directory.
 
-1. Push this project to a GitHub repo
-2. In Vercel, import the repo and set:
-   - **Root Directory:** `src/frontend`
-   - **Framework:** Next.js
-3. Add the environment variable in Vercel project settings:
-   - `DEEPSEEK_API_KEY` — your DeepSeek API key
-4. Deploy
+No environment variables are required.
 
-The app works on mobile browsers immediately — no native app needed.
+## Dev tools
 
-## Project Structure
+- `/ocr-lab` — diagnostics page: runs every preprocessing variant × PSM mode and scores them. Not linked from the app.
 
-```
-src/frontend/
-├── src/
-│   ├── app/
-│   │   ├── page.tsx                  # Main page + receipt parsing logic
-│   │   ├── layout.tsx                # Root layout
-│   │   └── globals.css               # Tailwind base
-│   ├── actions/
-│   │   └── receiptParser.ts          # Server Action → DeepSeek Vision API
-│   ├── components/
-│   │   └── features/
-│   │       ├── BillUploader.tsx       # Drag/drop, file picker, camera capture
-│   │       ├── BillEditor.tsx         # Item list + per-person assignment
-│   │       ├── SplitSummary.tsx       # Tax/tip, totals, per-person breakdown
-│   │       ├── HistoryPanel.tsx       # Saved session drawer
-│   │       └── PeopleManager.tsx      # Add/remove people
-│   └── lib/
-│       ├── types.ts                  # BillItem, Person, BillSession
-│       ├── utils.ts                  # formatCurrency (IDR), generateId, cn
-│       └── storage.ts                # localStorage CRUD
-├── next.config.mjs                   # Server Action body size (10mb)
-├── tailwind.config.ts
-└── package.json
-```
+## Notes
 
-## License
-
-MIT
+- The OCR engine (worker, WASM core, `ind`/`eng` language data, ~16 MB) is self-hosted under `public/tesseract/` and cached by the browser after first use.
