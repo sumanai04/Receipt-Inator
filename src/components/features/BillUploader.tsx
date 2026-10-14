@@ -112,13 +112,13 @@ export default function BillUploader({ onImage }: Props) {
           onClick={() => libraryRef.current?.click()}
           className={`border-2 border-dashed rounded-2xl p-10 text-center transition-colors cursor-pointer ${
             dragOver
-              ? "border-emerald-400 bg-emerald-400/10"
-              : "border-gray-700 hover:border-gray-500 bg-gray-900"
+              ? "border-accent bg-accent/10"
+              : "border-outline hover:border-outline-strong bg-surface-1"
           }`}
         >
           <div className="space-y-3">
             <svg
-              className="w-12 h-12 mx-auto text-gray-500"
+              className="w-12 h-12 mx-auto text-text-muted"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -127,11 +127,17 @@ export default function BillUploader({ onImage }: Props) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1.5}
-                d="M3 16.5v1.5A2.5 2.5 0 005.5 20h13a2.5 2.5 0 002.5-2.5V16.5m-9-9l-3 3m0 0l3 3m-3-3H21M3 9V7.5A2.5 2.5 0 015.5 5H9"
+                d="M6 2h12v20l-3-1.8-3 1.8-3-1.8L6 22V2Z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 7h6M9 11h6M9 15h4"
               />
             </svg>
-            <p className="text-gray-200 font-medium text-base">Scan a receipt</p>
-            <p className="text-gray-500 text-sm">Choose a photo from your gallery</p>
+            <p className="text-text font-medium text-base">Scan a receipt</p>
+            <p className="text-text-muted text-sm">Choose a photo from your gallery</p>
           </div>
 
           <input
@@ -164,7 +170,7 @@ export default function BillUploader({ onImage }: Props) {
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
             <button
               onClick={stopCamera}
-              className="px-4 py-2 bg-gray-800/80 text-white rounded-full text-sm"
+              className="px-4 py-2 bg-surface-2/80 text-white rounded-full text-sm"
             >
               Cancel
             </button>
@@ -183,13 +189,13 @@ export default function BillUploader({ onImage }: Props) {
             e.stopPropagation();
             startCamera();
           }}
-          className="mt-3 w-full py-2.5 text-sm text-gray-300 hover:text-white border border-gray-800 rounded-xl hover:bg-gray-900 transition-colors"
+          className="mt-3 w-full py-2.5 text-sm text-text hover:text-white border border-outline-subtle rounded-xl hover:bg-surface-1 transition-colors"
         >
           Take a photo
         </button>
       )}
 
-      {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-sm text-danger">{error}</p>}
     </div>
   );
 }

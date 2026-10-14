@@ -3,7 +3,42 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Design tokens — the single source of truth for color.
+   * Values are OKLCH channel triplets (L C H) consumed by tailwind.config.ts
+   * as `oklch(var(--token) / <alpha-value>)`, so opacity modifiers still work.
+   * See DESIGN.md §4 for rationale and measured contrast.
+   */
+  :root {
+    /* Surfaces — cool neutral ramp (hue ~262), perceptually stepped */
+    --ground: 13% 0.028 262;
+    --surface-1: 18% 0.024 262;
+    --surface-2: 23% 0.022 262;
+    --surface-3: 28% 0.02 262;
+
+    /* Borders / outlines */
+    --outline-subtle: 26% 0.02 262;
+    --outline: 34% 0.022 262;
+    --outline-strong: 46% 0.024 262;
+
+    /* Text on dark — WCAG AA + APCA checked (DESIGN.md §4.1) */
+    --text: 92% 0.006 264;
+    --text-muted: 70% 0.022 261;
+    --text-faint: 55% 0.027 264;
+
+    /* Accent — emerald (hue ~163) */
+    --accent: 70% 0.15 163;
+    --accent-text: 78% 0.16 163;
+    --on-accent: 16% 0.03 163;
+
+    /* Status — functional only, never decorative */
+    --success: 72% 0.15 163;
+    --warning: 82% 0.13 80;
+    --danger: 66% 0.2 25;
+    --info: 72% 0.12 240;
+  }
+
   body {
-    @apply bg-gray-950 text-gray-100 antialiased;
+    @apply bg-ground text-text antialiased;
   }
 }

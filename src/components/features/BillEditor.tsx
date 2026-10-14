@@ -69,11 +69,11 @@ export default function BillEditor({
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
+          <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wide">
             Items
           </h3>
           {items.length > 0 && (
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-text-muted">
               Tap a name to assign an item
             </span>
           )}
@@ -83,18 +83,18 @@ export default function BillEditor({
           {items.map((item) => (
             <div
               key={item.id}
-              className="bg-gray-900 border border-gray-800 rounded-xl p-3 space-y-2"
+              className="bg-surface-1 border border-outline-subtle rounded-xl p-3 space-y-2"
             >
               <div className="flex items-center justify-between">
-                <span className="text-gray-100 font-medium">{item.name}</span>
+                <span className="text-text font-medium">{item.name}</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-emerald-400 font-mono text-sm">
+                  <span className="text-accent-text font-mono text-sm">
                     {formatCurrency(item.price)}
                   </span>
                   <button
                     onClick={() => removeItem(item.id)}
                     aria-label={`Remove ${item.name}`}
-                    className="text-gray-600 hover:text-red-400 transition-colors"
+                    className="text-text-faint hover:text-danger transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -119,7 +119,7 @@ export default function BillEditor({
                         className={`px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${
                           isAssigned
                             ? `${COLORS[i % COLORS.length]} text-white`
-                            : "bg-gray-800 text-gray-500 hover:bg-gray-700"
+                            : "bg-surface-2 text-text-muted hover:bg-surface-3"
                         }`}
                       >
                         {person.name}
@@ -130,7 +130,7 @@ export default function BillEditor({
               )}
 
               {people.length === 0 && (
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-text-faint">
                   Add people below, then tap their name to split this item.
                 </p>
               )}
@@ -150,7 +150,7 @@ export default function BillEditor({
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Item name"
-            className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="flex-1 bg-surface-2 border border-outline rounded-xl px-3 py-2 text-sm text-text placeholder-text-muted focus:outline-none focus:border-accent transition-colors"
           />
           <div className="flex gap-2">
             <input
@@ -159,11 +159,11 @@ export default function BillEditor({
               value={newPrice}
               onChange={(e) => setNewPrice(e.target.value)}
               placeholder="Price"
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
+              className="flex-1 bg-surface-2 border border-outline rounded-xl px-3 py-2 text-sm text-text placeholder-text-muted focus:outline-none focus:border-accent transition-colors"
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium rounded-xl transition-colors whitespace-nowrap"
+              className="px-4 py-2 bg-accent hover:bg-accent-text text-on-accent text-sm font-medium rounded-xl transition-colors whitespace-nowrap"
             >
               Add
             </button>

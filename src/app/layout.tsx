@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bill Splitter",
+  title: "Receipt-inator",
   description: "Split bills with friends from a photo of your receipt",
 };
 

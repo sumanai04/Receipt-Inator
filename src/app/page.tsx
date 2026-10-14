@@ -134,14 +134,16 @@ export default function HomePage() {
     <div className="max-w-lg mx-auto px-4 py-6 pb-24">
       <header className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">Bill Splitter</h1>
-          <p className="text-gray-500 text-sm">Scan a receipt, split it fairly</p>
+          <h1 className="text-2xl font-bold text-text">Receipt-inator</h1>
+          <p className="text-text-muted text-sm">
+            Behold! It splits every bill... fairly!
+          </p>
         </div>
         <div className="flex gap-2">
           {stage === "edit" && (
             <button
               onClick={reset}
-              className="p-2 text-gray-400 hover:text-gray-200 transition-colors"
+              className="p-2 text-text-muted hover:text-text transition-colors"
               title="New"
               aria-label="New"
             >
@@ -152,7 +154,7 @@ export default function HomePage() {
           )}
           <button
             onClick={openHistory}
-            className="p-2 text-gray-400 hover:text-gray-200 transition-colors"
+            className="p-2 text-text-muted hover:text-text transition-colors"
             title="History"
             aria-label="History"
           >
@@ -168,15 +170,15 @@ export default function HomePage() {
           <BillUploader onImage={handleImage} />
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-800" />
+              <div className="w-full border-t border-outline-subtle" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-gray-950 px-4 text-sm text-gray-600">or</span>
+              <span className="bg-ground px-4 text-sm text-text-faint">or</span>
             </div>
           </div>
           <button
             onClick={startManual}
-            className="w-full py-3 border border-gray-800 hover:border-gray-600 text-gray-400 hover:text-gray-200 rounded-xl transition-colors text-sm"
+            className="w-full py-3 border border-outline-subtle hover:border-outline-strong text-text-muted hover:text-text rounded-xl transition-colors text-sm"
           >
             Enter items manually
           </button>
@@ -185,9 +187,9 @@ export default function HomePage() {
 
       {stage === "scanning" && (
         <div className="flex flex-col items-center justify-center py-20 space-y-4">
-          <div className="w-10 h-10 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400 text-sm">{status}</p>
-          <p className="text-gray-600 text-xs">Runs on your device — nothing is uploaded.</p>
+          <div className="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+          <p className="text-text-muted text-sm">{status}</p>
+          <p className="text-text-faint text-xs">Runs on your device — nothing is uploaded.</p>
         </div>
       )}
 
@@ -197,18 +199,18 @@ export default function HomePage() {
             <div className="relative rounded-xl overflow-hidden max-h-36">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={billImage} alt="Receipt" className="w-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ground via-transparent to-transparent" />
             </div>
           )}
 
           {notice && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-sm text-amber-300">
+            <div className="bg-warning/10 border border-warning/30 rounded-xl p-3 text-sm text-warning">
               {notice}
             </div>
           )}
 
           {engine && (
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-text-faint">
               Read via {engine === "paddle" ? "PaddleOCR" : "Tesseract"}
             </p>
           )}

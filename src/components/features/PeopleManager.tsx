@@ -40,7 +40,7 @@ export default function PeopleManager({ people, onChange }: Props) {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
+      <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wide">
         People
       </h3>
 
@@ -75,11 +75,11 @@ export default function PeopleManager({ people, onChange }: Props) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Add a person..."
-          className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors"
+          className="bg-surface-2 border border-outline rounded-xl px-3 py-2 text-sm text-text placeholder-text-muted focus:outline-none focus:border-accent transition-colors"
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium rounded-xl transition-colors"
+          className="px-4 py-2 bg-accent hover:bg-accent-text text-on-accent text-sm font-medium rounded-xl transition-colors"
         >
           Add
         </button>
